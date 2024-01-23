@@ -1,8 +1,9 @@
+import os.path
+
 from src.API_services import HeadHunterAPI
 from src.API_services import SuperJobAPI
-from src.vacancy import Vacancy
 from src.file_service import JSONService
-import os.path
+from src.vacancy import Vacancy
 
 
 def search_session():
@@ -47,7 +48,8 @@ def search_session():
                                     result.append(item.json)
                                 json_result = {
                                     "request": vacancy,
-                                    "search_system": 'headhunter' if service.lower() in ['headhunter', '1'] else 'superjobs',
+                                    "search_system": 'headhunter' if service.lower() in ['headhunter',
+                                                                                         '1'] else 'superjobs',
                                     "response": result}
                                 json_service.write_to_file(json_result)
                             case 'no':
@@ -56,5 +58,3 @@ def search_session():
                 pass
             case _:
                 print("Sorry, I don't understand you. Let's try again.")
-
-
