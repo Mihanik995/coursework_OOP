@@ -1,4 +1,3 @@
-import json
 from abc import ABC
 from abc import abstractmethod
 
@@ -34,13 +33,3 @@ class SuperJobAPI(APIService):
                      .get('https://api.superjob.ru/2.0/vacancies/', params=request_params, headers=headers)
                      .json())
         return vacancies
-
-
-with open('new_file_sj.json', 'w', encoding='utf8') as file:
-    api = SuperJobAPI('python')
-    json.dump(api.API_request()['objects'], file,ensure_ascii=False)
-with open('new_file_hh.json', 'w', encoding='utf8') as file:
-    api = HeadHunterAPI('python')
-    json.dump(api.API_request()['items'], file, ensure_ascii=False)
-# print(SuperJobAPI('python').API_request()['objects'])
-# print(HeadHunterAPI('python').API_request()['items'])
