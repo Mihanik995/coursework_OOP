@@ -21,7 +21,7 @@ class HeadHunterAPI(APIService):
     def API_request(self):
         params = {'text': self.request}
         response = requests.get(url='https://api.hh.ru/vacancies', params=params)
-        return response.json()
+        return response.json()['items']
 
 
 class SuperJobAPI(APIService):
@@ -30,6 +30,5 @@ class SuperJobAPI(APIService):
         headers = {'X-Api-App-Id': SUPERJOBS_SECRET_KEY}
         request_params = {'keyword': self.request}
         vacancies = (requests
-                     .get('https://api.superjob.ru/2.0/vacancies/', params=request_params, headers=headers)
-                     .json())
-        return vacancies
+                     .get('https://api.superjob.ru/2.0/vacancies/', params=request_params, headers=headers))
+        return vacancies.json()['objects']

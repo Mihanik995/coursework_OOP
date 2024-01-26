@@ -21,7 +21,15 @@ def choose_one_of(question: str, *args: str):
                 return args[i - 1]
         print("Sorry, I don't understand you. Let's try again.")
 
-
+def complete_the_data(vacancy, api_choice, current_vacancies, json_service):
+    result = []
+    for item in current_vacancies:
+        result.append(item.json)
+    json_result = {
+        "request": vacancy,
+        "search_system": api_choice,
+        "response": result}
+    json_service.write_to_file(json_result)
 def search_session():
     vacancy = input("Input vacancy you're interested in: ")
 
@@ -33,27 +41,28 @@ def search_session():
     api_vacancies = api.API_request()
     current_vacancies = []
     print('\nSearch results:')
-    for item in api_vacancies['items']:
+    for item in api_vacancies:
         new_vacancy = Vacancy(item)
         current_vacancies.append(new_vacancy)
         print(new_vacancy)
+        print()
 
-    answer = choose_one_of("Do you want to save search results? (yes/no)",
+    answer = choose_one_of("Do you want to save search results?",
                            'yes', 'no')
     if answer == 'yes':
         while True:
-            file_name = input('Insert file name: ')
-            json_service = JSONService(os.path.join('search_history', f'{file_name}.json'))
+            file_name = f"{input('Insert file name: ')}.json"
+            json_service = JSONService(file_name)
             if json_service.file_exists():
-                answer = choose_one_of("File with current name already exists. Do you want to rewrite it? (yes/no):",
+                answer = choose_one_of("File with current name already exists. Do you want to rewrite it?",
                                        'yes', 'no')
                 if answer == 'yes':
-                    result = []
-                    for item in current_vacancies:
-                        result.append(item.json)
-                    json_result = {
-                        "request": vacancy,
-                        "search_system": api_choice,
-                        "response": result}
-                    json_service.write_to_file(json_result)
+                    complete_the_data(vacancy, api_choice, current_vacancies, json_service)
                     break
+            else:
+                complete_the_data(vacancy, api_choice, current_vacancies, json_service)
+                break
+
+
+if __name__ == '__main__':
+    search_session()
