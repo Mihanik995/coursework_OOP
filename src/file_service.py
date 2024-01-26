@@ -31,4 +31,4 @@ class JSONService(FileService):
 
     def write_to_file(self, data):
         with open(self.file_address, 'w') as file:
-            json.dump(file, data)
+            json.dump(file, data, ensure_ascii=False)
